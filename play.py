@@ -72,6 +72,11 @@ def get_matches():
 @app.template_filter('humantime')
 def human_readable(start_time):
     now = datetime.datetime.now()
+    d = start_time - now
+    if d < datetime.timedelta(minutes=-30):
+        return 'Completed'
+    if d < datetime.timedelta(minutes=0):
+        return 'Playing'
     delta = relativedelta(start_time, now)
     attrs = ['years', 'months', 'days', 'hours', 'minutes', 'seconds']
     hr = lambda delta: [
