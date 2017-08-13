@@ -11,13 +11,13 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Play-Play @ Work-Work</title>
+  <title>Play-Play</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:400,300,700">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:500">
-  <link rel="stylesheet" href="/static/css/app.css">
-  <link rel="stylesheet" href="/static/css/hack.css">
-  <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/hack.css">
+  <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
 </head>
 <body>
 
@@ -36,46 +36,62 @@
       <th class="td-group-4">Winner</th>
     </tr>
     </thead>
-    <tfoot>
-      <tr>
-        <td colspan="4">
-          <a href="#">Add new match...</a>
-        </td>
-      </tr>
-    </tfoot>
     <tbody>
 
-      {% for match in matches %}
       <tr>
         <td class="td-group-1">
-          <a href="{{ match.game.url }}" target="_blank">
-            {{ match.game.title }}
+          <a href="https://boardgamegeek.com/boardgame/172225/exploding-kittens" target="_blank">
+            Exploding Kittens
           </a>
         </td>
         <td class="td-group-2">
-          {{ match.start_time|humantime }}
+          32 min (12:00)
         </td>
         <td class="td-group-3">
-          <a href="#">
-            {{ match.players.registered|length }}
-            of
-            ({{ match.players.min }}-{{ match.players.max }})
-          </a>
+          <a href="#">2 of (2-5)</a>
         </td>
         <td class="td-group-4">
-          <a href="#">
-            {{ match.winner or '---' }}
-          </a>
+          <a href="#">---</a>
         </td>
       </tr>
-      {% endfor %}
+
+      <tr>
+        <td class="td-group-1">
+          <a href="#" target="_blank">Terraforming Mars</a>
+        </td>
+        <td class="td-group-2">
+          2d (fri 18:00)
+        </td>
+        <td class="td-group-3">
+          <a href="#">4 of (2-6)</a>
+        </td>
+        <td class="td-group-4">
+          <a href="#">---</a>
+        </td>
+      </tr>
+
+      <tr>
+          <td class="td-group-1">
+            <a href="#" target="_blank">Caverna</a>
+          </td>
+          <td class="td-group-2">
+            3d (sat 14:00)
+          </td>
+          <td class="td-group-3">
+            <a href="#">3 of (2-7)</a>
+          </td>
+          <td class="td-group-4">
+            <a href="#">---</a>
+          </td>
+        </tr>
+
     </tbody>
   </table>
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
 
 </body>
 </html>
