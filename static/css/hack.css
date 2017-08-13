@@ -1,0 +1,13 @@
+body {
+  /* font-size: 30px; */
+  padding-top: 0px;
+  zoom: 250%;
+}
+
+td, th {
+  /* padding: 0.5em !important; */
+}
+
+td a {
+  display: block;
+}

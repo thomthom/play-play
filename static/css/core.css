@@ -1,0 +1,182 @@
+/*@import url(//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700);*/
+
+
+/*******************************************************************************
+ *
+ * $DOCUMENT
+ *
+ ******************************************************************************/
+
+
+html {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 0.85em;
+  color: #ddd;
+  background: #111;
+}
+
+body {
+  /*background: #222;*/
+  margin: 0 auto;
+  width: 100em;
+}
+
+
+/*******************************************************************************
+ *
+ * $TABLES
+ *
+ ******************************************************************************/
+
+table {
+  background: #222;
+  width: 100%;
+  border-spacing: 0.2em;
+  border-collapse: separate;
+}
+
+th, td {
+  padding: 0.5em 1em;
+}
+
+th {
+  background: #121212;
+}
+
+tr.sortable th:hover {
+  background: #622;
+}
+
+td {
+  background: #181818;
+}
+
+tr:hover td {
+  /*background: #181836;*/
+  background: #141414;
+}
+
+
+/*******************************************************************************
+ *
+ * $LINKS
+ *
+ ******************************************************************************/
+
+a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid #622;
+}
+
+a:hover {
+  color: #fff;
+}
+
+
+/*******************************************************************************
+ *
+ * $LISTS
+ *
+ ******************************************************************************/
+
+ul {
+  list-style-type: square;
+  padding-left: 2em;
+}
+
+
+
+/*******************************************************************************
+ *
+ * $QUOTES
+ *
+ ******************************************************************************/
+
+blockquote {
+  border-left: 10px solid #111;
+  white-space: pre-line;
+}
+
+blockquote {
+  background: #181818;
+  border-left: 10px solid #000;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C""\201D""\2018""\2019";
+}
+
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+
+blockquote p {
+  display: inline;
+}
+
+
+
+/*******************************************************************************
+ *
+ * $CHARTS
+ *
+ ******************************************************************************/
+
+.chart {
+  /*background: #121212;*/
+}
+
+
+col {
+  background: red !important;
+  color: blue !important;
+}
+
+
+
+/*******************************************************************************
+ *
+ * $PAGINATION
+ *
+ ******************************************************************************/
+
+ul.pagination {
+  background: #222;
+  padding: 0;
+  list-style: none;
+}
+
+ul.pagination li {
+  background: #181818;
+  margin: 2px;
+  display: inline-block;
+}
+
+ul.pagination li > * {
+  padding: 0.5em 1em;
+  display: inline-block;
+}
+
+ul.pagination li > a {
+  border-bottom-width: 3px;
+}
+
+ul.pagination li.disabled {
+  color: #000;
+  background: none;
+}
+
+ul.pagination li.active {
+  background: #622;
+  border-bottom: 3px solid #622;
+}
+
+ul.pagination li a:hover {
+  background: #141414;
+}
+
