@@ -4,7 +4,7 @@
 #
 # set FLASK_APP=play.py
 # set FLASK_DEBUG=1
-# flask ruin
+# flask run
 
 import datetime
 import os

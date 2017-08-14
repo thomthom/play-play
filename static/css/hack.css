@@ -4,10 +4,24 @@ body {
   zoom: 250%;
 }
 
-td, th {
-  /* padding: 0.5em !important; */
-}
 
 td a {
   display: block;
+}
+
+
+.modal {
+  zoom: 75%;
+}
+
+.modal .modal-content {
+  background: #2a2a2b !important;
+}
+
+.modal .modal-header {
+  border-bottom-color: #1a1a1b !important;
+}
+
+.modal .modal-footer {
+  border-top-color: #1a1a1b !important;
 }
