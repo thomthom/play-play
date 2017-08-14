@@ -1,0 +1,8 @@
+@for $i from 2 through 8 {
+  .td-group-#{$i} {
+     border-left: 1px solid $table-border-color;
+  }
+  .td-group-#{$i} + .td-group-#{$i} {
+    border-left: none;
+  }
+}

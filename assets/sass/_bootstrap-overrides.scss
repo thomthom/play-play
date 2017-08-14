@@ -1,0 +1,42 @@
+//== Typography
+//
+// Adjust the font weights for the Oswald font.
+
+body {
+  font-weight: 300;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-weight: 300;
+
+  small,
+  .small {
+    font-weight: 300;
+  }
+}
+
+th {
+  font-weight: 300;
+}
+
+.sidebar, .pagination, b {
+  font-weight: 400;
+}
+
+
+//== Code
+//
+
+pre {
+  border: none;
+}
+
+
+//== Grid
+//
+
+.no-gutter > [class*='col-'] {
+  padding-right:0;
+  padding-left:0;
+}
