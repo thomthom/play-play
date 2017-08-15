@@ -39,7 +39,7 @@
     <tfoot>
       <tr>
         <td colspan="4">
-          <a href="#" data-toggle="modal" data-target="#myModal">
+          <a href="#" data-toggle="modal" data-target="#addMatchModal">
             Add new match...
           </a>
         </td>
@@ -75,24 +75,60 @@
   </table>
 
 
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">Add Match</h4>
-        </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary">Save</button>
-        </div>
+  {% import 'modal.html' as modal %}
+
+  {% call modal.accept_dismiss('addMatchModal', 'Add Match', 'Save', 'Cancel') %}
+    
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="form-group">
+        <label for="selPreviousGames">Previously Played Games</label>
+        <select class="form-control" id="selPreviousGames">
+          <option>Exploding Kittens (2-5👤, 15min 🕑)</option>
+          <option>Scythe (3-6👤, 115min 🕑)</option>
+          <option>Settlers (2-5👤, 60min 🕑)</option>
+        </select>
       </div>
-    </div>
-  </div>
+    </div><!-- /.col-lg-12 -->
+  </div><!-- /.row -->
+
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="form-group">
+        <input type="datetime-local" class="form-control" id="txtGameStart" placeholder="Starting Time">
+      </div>
+    </div><!-- /.col-lg-4 -->
+  </div><!-- /.row -->
+
+  <hr>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="form-group">
+        <label for="txtGameTitle">Add Game</label>
+        <input type="text" class="form-control" id="txtGameTitle" placeholder="Game Title">
+      </div>
+    </div><!-- /.col-lg-12 -->
+  </div><!-- /.row -->
+
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="form-group">
+        <input type="text" class="form-control" id="txtMinPlayers" placeholder="Minimum Players">
+      </div>
+    </div><!-- /.col-lg-4 -->
+    <div class="col-lg-4">
+      <div class="form-group">
+        <input type="text" class="form-control" id="txtMaxPlayers" placeholder="Maximum Players">
+      </div>
+    </div><!-- /.col-lg-4 -->
+    <div class="col-lg-4">
+      <div class="form-group">
+        <input type="text" class="form-control" id="txtGameTime" placeholder="Game Time">
+      </div>
+    </div><!-- /.col-lg-4 -->
+  </div><!-- /.row -->
+  {% endcall %}
 
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
