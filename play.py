@@ -9,13 +9,14 @@
 import datetime
 import os
 
+import dateutil.parser
 from dateutil.relativedelta import relativedelta
 
 from tinydb import TinyDB, Query
 from tinydb_serialization import SerializationMiddleware
 from datetime_serializer import DateTimeSerializer
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 
 ################################################################################
 # Setup:
@@ -65,28 +66,27 @@ def get_matches():
         result = table.all()
     return result
 
-################################################################################
-# Template Filters:
+def add_match():
+    print('Adding Match!')
+    print(request)
+    print(request.form)
+    row = {
+        'game' : {
+            'title' : request.form['game_title'],
+            'url' : request.form['game_url'],
+        },
+        'start_time' : dateutil.parser.parse(request.form['start_time']),
+        'players' : {
+            'registered' : [],
+            'min' : request.form['players_min'],
+            'max' : request.form['players_max'],
+        },
+        'winner' : None
+    }
+    table = db.table('matches')
+    table.insert(row)
+    return True
 
-# TODO: Clean up!
-@app.template_filter('humantime')
-def human_readable(start_time):
-    now = datetime.datetime.now()
-    d = start_time - now
-    if d < datetime.timedelta(minutes=-30):
-        return 'Completed'
-    if d < datetime.timedelta(minutes=0):
-        return 'Playing'
-    delta = relativedelta(start_time, now)
-    attrs = ['years', 'months', 'days', 'hours', 'minutes', 'seconds']
-    hr = lambda delta: [
-        '%d %s' % (getattr(delta, attr), getattr(delta, attr) > 1 and attr or attr[:-1]) 
-            for attr in attrs if getattr(delta, attr)
-    ]
-    # TODO: Return abbreviations: d, h, min, s
-    relative_time = hr(delta)[0]
-    day_time = '{:%a %H:%M}'.format(start_time)
-    return 'In {} @ {}'.format(relative_time, day_time)
 
 ################################################################################
 # Routes:
@@ -97,29 +97,10 @@ def index():
     return app.send_static_file('index.html')
 
 
-@app.route("/api/v1/matches")
+@app.route('/api/v1/matches', methods=['GET', 'POST'])
 def list_matches():
-    matches = get_matches()
-    return jsonify(matches)
-
-
-@app.route("/players/add")
-def add_player():
-    return "Add Player"
-
-
-@app.route("/games")
-def list_games():
-    return "List games"
-
-@app.route("/games/add")
-def add_game():
-    return "Add game"
-
-@app.route("/games/<game_id>/edit")
-def edit_game(game_id):
-    return render_template('page.html', game_id=game_id)
-
-@app.route("/games/remove")
-def remove_game():
-    return "Remove game"
+    if request.method == 'POST':
+        return jsonify(add_match())
+    else:
+        matches = get_matches()
+        return jsonify(matches)

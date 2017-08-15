@@ -13,10 +13,11 @@ Vue.component('play-modal', {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">
-          {{ accept }}
-        </button>
-        <button type="button" class="btn btn-primary">
           {{ dismiss }}
+        </button>
+        <button type="button" class="btn btn-primary"
+                v-on:click="$emit('accept')">
+          {{ accept }}
         </button>
       </div>
     </div>
@@ -33,11 +34,30 @@ var app = new Vue({
   },
   methods: {
     getMatches: function() {
-      $.ajax({
-        url: '/api/v1/matches'
-        }).done(data => {
-          this.matches = data;
-        });
+      $.get('/api/v1/matches', (data) => {
+        this.matches = data;
+      });
+    },
+    addMatch: function() {
+      console.log('Add Match!');
+      var date_time = $('#dateTimeMatch').data("DateTimePicker");
+      console.log(date_time.date());
+      var match = {
+        game_title: 'Exploding Kittens',
+        game_url : 'https://boardgamegeek.com/boardgame/172225/exploding-kittens',
+        start_time: date_time.date().format(),
+        players_registered: [],
+        players_min: 2,
+        players_max: 5,
+      };
+      $.post('/api/v1/matches', match, (data) => {
+        console.log('Added Match!');
+        this.getMatches();
+      });
+      $('#addGameModal').modal('hide');
+    },
+    addGame: function() {
+      console.log('Add Game!');
     },
     // Hack: Quick and dirty!
     // https://laracasts.com/discuss/channels/vue/momentjs-with-vue/replies/283896

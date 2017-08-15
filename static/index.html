@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:500">
   <link rel="stylesheet" href="/static/css/app.css">
   <link rel="stylesheet" href="/static/css/hack.css">
+  <link rel="stylesheet" href="/static/css/bootstrap-datetimepicker.min.css" />
   <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
 </head>
 <body>
@@ -76,12 +77,13 @@
     </tbody>
   </table>
 
-  <play-modal title="Add Match" id="addMatchModal" accept="Save" dismiss="Cancel">
+  <play-modal title="Add Match" id="addMatchModal"
+              accept="Add Match" dismiss="Cancel"
+              v-on:accept="addMatch">
   
     <div class="row">
       <div class="col-lg-12">
         <div class="form-group">
-          <label for="selPreviousGames">Previously Played Games</label>
           <select class="form-control" id="selPreviousGames">
             <option>Exploding Kittens (2-5👤, 15min 🕑)</option>
             <option>Scythe (3-6👤, 115min 🕑)</option>
@@ -92,43 +94,46 @@
     </div><!-- /.row -->
 
     <div class="row">
-      <div class="col-lg-4">
-        <div class="form-group">
-          <input type="datetime-local" class="form-control" id="txtGameStart" placeholder="Starting Time">
-        </div>
-      </div><!-- /.col-lg-4 -->
-    </div><!-- /.row -->
-
-    <hr>
-
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="form-group">
-          <label for="txtGameTitle">Add Game</label>
-          <input type="text" class="form-control" id="txtGameTitle" placeholder="Game Title">
-        </div>
-      </div><!-- /.col-lg-12 -->
-    </div><!-- /.row -->
-
-    <div class="row">
-      <div class="col-lg-4">
-        <div class="form-group">
-          <input type="text" class="form-control" id="txtMinPlayers" placeholder="Minimum Players">
-        </div>
-      </div><!-- /.col-lg-4 -->
-      <div class="col-lg-4">
-        <div class="form-group">
-          <input type="text" class="form-control" id="txtMaxPlayers" placeholder="Maximum Players">
-        </div>
-      </div><!-- /.col-lg-4 -->
-      <div class="col-lg-4">
-        <div class="form-group">
-          <input type="text" class="form-control" id="txtGameTime" placeholder="Game Time">
-        </div>
-      </div><!-- /.col-lg-4 -->
-    </div><!-- /.row -->
+        <div class="col-lg-10 col-lg-offset-1">
+            <div id="dateTimeMatch"></div>
+        </div><!-- /.col-lg-12 -->
+      </div><!-- /.row -->
 
   </play-modal>
+
+
+  <play-modal title="Add Game" id="addGameModal"
+              accept="Add Game" dismiss="Cancel"
+              v-on:accept="addGame">
+    
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="form-group">
+              <label for="txtGameTitle">Add Game</label>
+              <input type="text" class="form-control" id="txtGameTitle" placeholder="Game Title">
+            </div>
+          </div><!-- /.col-lg-12 -->
+        </div><!-- /.row -->
+    
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="form-group">
+              <input type="text" class="form-control" id="txtMinPlayers" placeholder="Minimum Players">
+            </div>
+          </div><!-- /.col-lg-4 -->
+          <div class="col-lg-4">
+            <div class="form-group">
+              <input type="text" class="form-control" id="txtMaxPlayers" placeholder="Maximum Players">
+            </div>
+          </div><!-- /.col-lg-4 -->
+          <div class="col-lg-4">
+            <div class="form-group">
+              <input type="text" class="form-control" id="txtGameTime" placeholder="Game Time">
+            </div>
+          </div><!-- /.col-lg-4 -->
+        </div><!-- /.row -->
+    
+      </play-modal>
 
   </div> <!-- #app -->
 
@@ -138,8 +143,20 @@
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="/static/js/bootstrap.min.js"></script>
   <script src="/static/js/moment-with-locales.js"></script>
+  <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
   <script src="/static/js/vue.js"></script>
   <script src="/static/js/app.js"></script>
+
+  <script type="text/javascript">
+    $(function () {
+        $('#dateTimeMatch').datetimepicker({
+            inline: true,
+            sideBySide: true,
+            format: 'DDDD YYYY HH:mm',
+            minDate: Date.now(),
+        });
+    });
+  </script>
 
 </body>
 </html>
