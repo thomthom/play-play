@@ -15,7 +15,7 @@ from tinydb import TinyDB, Query
 from tinydb_serialization import SerializationMiddleware
 from datetime_serializer import DateTimeSerializer
 
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 
 ################################################################################
 # Setup:
@@ -37,8 +37,8 @@ app = Flask(__name__)
 ################################################################################
 # Utilities:
 
-def seed_dummy():
-    start_time = datetime.datetime.now() + datetime.timedelta(minutes=32)
+def seed_dummy(minutes=32):
+    start_time = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
     row = {
         'game' : {
             'title' : 'Exploding Kittens',
@@ -94,7 +94,13 @@ def human_readable(start_time):
 @app.route('/')
 def index():
     matches = get_matches()
-    return render_template('index.html', matches=matches)
+    return app.send_static_file('index.html')
+
+
+@app.route("/api/v1/matches")
+def list_matches():
+    matches = get_matches()
+    return jsonify(matches)
 
 
 @app.route("/players/add")
