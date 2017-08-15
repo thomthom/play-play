@@ -17,6 +17,7 @@ from tinydb_serialization import SerializationMiddleware
 from datetime_serializer import DateTimeSerializer
 
 from flask import Flask, render_template, jsonify, request
+from flask.views import MethodView
 
 ################################################################################
 # Setup:
@@ -97,10 +98,22 @@ def index():
     return app.send_static_file('index.html')
 
 
-@app.route('/api/v1/matches', methods=['GET', 'POST'])
-def list_matches():
-    if request.method == 'POST':
-        return jsonify(add_match())
-    else:
+# @app.route('/api/v1/matches', methods=['GET', 'POST'])
+# def list_matches():
+#     if request.method == 'POST':
+#         return jsonify(add_match())
+#     else:
+#         matches = get_matches()
+#         return jsonify(matches)
+
+
+class MatchRoute(MethodView):
+
+    def get(self):
         matches = get_matches()
         return jsonify(matches)
+
+    def post(self):
+        return jsonify(add_match())
+
+app.add_url_rule('/api/v1/matches', view_func=MatchRoute.as_view('match'))

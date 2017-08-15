@@ -35,6 +35,7 @@ var app = new Vue({
   methods: {
     getMatches: function() {
       $.get('/api/v1/matches', (data) => {
+        console.log('Boot!');
         this.matches = data;
       });
     },
@@ -46,7 +47,6 @@ var app = new Vue({
         game_title: 'Exploding Kittens',
         game_url : 'https://boardgamegeek.com/boardgame/172225/exploding-kittens',
         start_time: date_time.date().format(),
-        players_registered: [],
         players_min: 2,
         players_max: 5,
       };
