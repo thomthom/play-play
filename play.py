@@ -10,7 +10,6 @@ import datetime
 import os
 
 import dateutil.parser
-from dateutil.relativedelta import relativedelta
 
 from tinydb import TinyDB, Query
 from tinydb_serialization import SerializationMiddleware
@@ -44,7 +43,8 @@ def seed_dummy(minutes=32):
     row = {
         'game' : {
             'title' : 'Exploding Kittens',
-            'url' : 'https://boardgamegeek.com/boardgame/172225/exploding-kittens'
+            'url' : 'https://boardgamegeek.com/boardgame/172225/exploding-kittens',
+            'time' : 30
         },
         'start_time' : start_time,
         'players' : {
@@ -61,16 +61,9 @@ def seed_dummy(minutes=32):
 def get_matches():
     table = db.table('matches')
     result = table.all()
-    # TODO: Remove debug seeding.
-    if not result:
-        seed_dummy()
-        result = table.all()
     return result
 
 def add_match():
-    print('Adding Match!')
-    print(request)
-    print(request.form)
     row = {
         'game' : {
             'title' : request.form['game_title'],
@@ -94,17 +87,8 @@ def add_match():
 
 @app.route('/')
 def index():
-    matches = get_matches()
+    # TODO(thomthom): Use jinja template and inject app title.
     return app.send_static_file('index.html')
-
-
-# @app.route('/api/v1/matches', methods=['GET', 'POST'])
-# def list_matches():
-#     if request.method == 'POST':
-#         return jsonify(add_match())
-#     else:
-#         matches = get_matches()
-#         return jsonify(matches)
 
 
 class MatchRoute(MethodView):
