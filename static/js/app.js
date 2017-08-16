@@ -35,14 +35,11 @@ var app = new Vue({
   methods: {
     getMatches: function() {
       $.get('/api/v1/matches', (data) => {
-        console.log('Boot!');
         this.matches = data;
       });
     },
     addMatch: function() {
-      console.log('Add Match!');
       var date_time = $('#dateTimeMatch').data("DateTimePicker");
-      console.log(date_time.date());
       var match = {
         game_title: 'Exploding Kittens',
         game_url : 'https://boardgamegeek.com/boardgame/172225/exploding-kittens',
@@ -51,10 +48,9 @@ var app = new Vue({
         players_max: 5,
       };
       $.post('/api/v1/matches', match, (data) => {
-        console.log('Added Match!');
         this.getMatches();
+        $('#addMatchModal').modal('hide');
       });
-      $('#addGameModal').modal('hide');
     },
     addGame: function() {
       console.log('Add Game!');
