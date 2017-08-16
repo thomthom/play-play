@@ -39,15 +39,6 @@
       <th class="td-group-4">Winner</th>
     </tr>
     </thead>
-    <tfoot>
-      <tr>
-        <td colspan="4">
-          <a href="#" data-toggle="modal" data-target="#addMatchModal">
-            Add new match...
-          </a>
-        </td>
-      </tr>
-    </tfoot>
     <tbody>
 
       <tr v-for="match in matches">
@@ -77,6 +68,12 @@
 
     </tbody>
   </table>
+
+  <div id="footer">
+    <a href="#" data-toggle="modal" data-target="#addMatchModal">
+      Add new match...
+    </a>
+  </div>
 
   <play-modal title="Add Match" id="addMatchModal"
               accept="Add Match" dismiss="Cancel"
