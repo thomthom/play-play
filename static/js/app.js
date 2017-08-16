@@ -2,7 +2,7 @@ Vue.component('play-modal', {
   props: ['title', 'accept', 'dismiss'],
   template: `
 <div class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -41,19 +41,24 @@ var app = new Vue({
     addMatch: function() {
       var date_time = $('#dateTimeMatch').data("DateTimePicker");
       var match = {
-        game_title: 'Exploding Kittens',
-        game_url : 'https://boardgamegeek.com/boardgame/172225/exploding-kittens',
+        game_title: $('#txtMatchGameTitle').val(),
+        game_url: $('#txtMatchGameUrl').val(),
+        game_time: parseInt($('#txtMatchGameTime').val()),
         start_time: date_time.date().format(),
-        players_min: 2,
-        players_max: 5,
+        players_min: parseInt($('#txtMatchMinPlayers').val()),
+        players_max: parseInt($('#txtMatchMaxPlayers').val()),
       };
       $.post('/api/v1/matches', match, (data) => {
         this.getMatches();
         $('#addMatchModal').modal('hide');
       });
     },
-    addGame: function() {
-      console.log('Add Game!');
+    resetMatchModal: function() {
+      $('#txtMatchGameTitle').val('');
+      $('#txtMatchGameUrl').val('');
+      $('#txtMatchGameTime').val('');
+      $('#txtMatchMinPlayers').val('');
+      $('#txtMatchMaxPlayers').val('');
     },
     // Hack: Quick and dirty!
     // https://laracasts.com/discuss/channels/vue/momentjs-with-vue/replies/283896
@@ -62,6 +67,15 @@ var app = new Vue({
     }
   },
   mounted: function() {
+    $('#dateTimeMatch').datetimepicker({
+      inline: true,
+      sideBySide: true,
+      format: 'DDDD YYYY HH:mm',
+      minDate: Date.now(),
+    });
+    $('#addMatchModal').on('show.bs.modal', (e) => {
+      this.resetMatchModal();
+    })
     this.getMatches();
   }
 })

@@ -25,3 +25,12 @@ td a {
 .modal .modal-footer {
   border-top-color: #1a1a1b !important;
 }
+
+
+#board tfoot tr {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #2a2a2b;
+}
