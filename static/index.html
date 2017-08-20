@@ -43,8 +43,8 @@
 
       <tr v-for="match in matches">
         <td class="td-group-1">
-          <a v-bind:href="match.game.url" target="_blank">
-            {{ match.game.title }}
+          <a v-bind:href="match.game_url" target="_blank">
+            {{ match.game_title }}
           </a>
         </td>
         <td class="td-group-2">
@@ -53,9 +53,9 @@
         </td>
         <td class="td-group-3">
           <a href="#">
-            {{ match.players.registered.length }}
+            {{ split(match.players_registered, ';').length }}
             of
-            ({{ match.players.min }}-{{ match.players.max }})
+            ({{ match.players_min }}-{{ match.players_max }})
           </a>
         </td>
         <td class="td-group-4">

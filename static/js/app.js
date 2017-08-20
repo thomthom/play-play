@@ -40,11 +40,13 @@ var app = new Vue({
     },
     addMatch: function() {
       var date_time = $('#dateTimeMatch').data("DateTimePicker");
+      // console.log(moment(date_time.date()).format());
+      // console.log(moment(date_time.date()).utc().format());
       var match = {
         game_title: $('#txtMatchGameTitle').val(),
         game_url: $('#txtMatchGameUrl').val(),
         game_time: parseInt($('#txtMatchGameTime').val()),
-        start_time: date_time.date().format(),
+        start_time: moment(date_time.date()).utc().format(),
         players_min: parseInt($('#txtMatchMinPlayers').val()),
         players_max: parseInt($('#txtMatchMaxPlayers').val()),
       };
@@ -65,6 +67,9 @@ var app = new Vue({
     // https://laracasts.com/discuss/channels/vue/momentjs-with-vue/replies/283896
     moment(...args) {
       return moment(...args);
+    },
+    split(string, delimiter) {
+      return string.split(delimiter).filter(x => x);
     }
   },
   mounted: function() {
