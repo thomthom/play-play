@@ -10,75 +10,93 @@ import datetime
 import os
 
 import dateutil.parser
+from datetime import timezone
 
-from tinydb import TinyDB, Query
-from tinydb_serialization import SerializationMiddleware
-from datetime_serializer import DateTimeSerializer
+from sqlite3 import dbapi2 as sqlite3
 
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, current_app, g
 from flask.views import MethodView
 
 ################################################################################
 # Setup:
 
-# Paths
-project_path = os.path.dirname(__file__)
-
-# Database Serialization
-serialization = SerializationMiddleware()
-serialization.register_serializer(DateTimeSerializer(), 'TinyDate')
-
-# Database Config
-db_file = os.path.join(project_path, 'database', 'play.json')
-db = TinyDB(db_file, storage=serialization)
-
-# Server
 app = Flask(__name__)
+
+app.config.update(dict(
+    DATABASE=os.path.join(app.root_path, 'database', 'play.sqlite')
+))
+app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+
+
+def connect_db():
+    """Connects to the specific database."""
+    rv = sqlite3.connect(current_app.config['DATABASE'],
+                         detect_types=sqlite3.PARSE_DECLTYPES)
+    # rv.row_factory = sqlite3.Row
+    rv.row_factory = dict_factory
+    return rv
+
+
+def init_db():
+    """Initializes the database."""
+    db = get_db()
+    with current_app.open_resource('schema.sql', mode='r') as f:
+        db.cursor().executescript(f.read())
+    db.commit()
+
+
+def get_db():
+    """Opens a new database connection if there is none yet for the
+    current application context.
+    """
+    if not hasattr(g, 'sqlite_db'):
+        g.sqlite_db = connect_db()
+    return g.sqlite_db
+
+
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
+
+# For some reason, SQLite doesn't seem to do a full round trip of datetime.
+# It store datetime with timezone info appended which then later chokes when
+# the date is parsed back. For now, using this until the reason for this
+# weirdness is determined.
+def utc_datetime(string):
+    date = dateutil.parser.parse(string)
+    utc_date = date.astimezone(timezone.utc)
+    return utc_date.replace(tzinfo=None)
+
 
 ################################################################################
 # Utilities:
 
-def seed_dummy(minutes=32):
-    start_time = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
-    row = {
-        'game' : {
-            'title' : 'Exploding Kittens',
-            'url' : 'https://boardgamegeek.com/boardgame/172225/exploding-kittens',
-            'time' : 30
-        },
-        'start_time' : start_time,
-        'players' : {
-            'registered' : ['Thom', 'David'],
-            'min' : 2,
-            'max' : 5,
-        },
-        'winner' : None
-    }
-    table = db.table('matches')
-    table.insert(row)
+def get_last_matches(limit=20):
+    # init_db()
+    db = get_db()
+    cur = db.execute('SELECT * FROM matches ORDER BY id DESC LIMIT ?', [limit])
+    entries = cur.fetchall()
+    return entries
 
-
-def get_matches():
-    table = db.table('matches')
-    result = table.all()
-    return result
 
 def add_match():
-    row = {
-        'game' : {
-            'title' : request.form['game_title'],
-            'url' : request.form['game_url'],
-        },
-        'start_time' : dateutil.parser.parse(request.form['start_time']),
-        'players' : {
-            'registered' : [],
-            'min' : request.form['players_min'],
-            'max' : request.form['players_max'],
-        },
-        'winner' : None
-    }
-    table = db.table('matches')
-    table.insert(row)
+    data = [
+        request.form['game_title'],
+        request.form['game_url'],
+        # db_time(request.form['start_time']),
+        utc_datetime(request.form['start_time']),
+        request.form['players_min'],
+        request.form['players_max']
+    ]
+    db = get_db()
+    db.execute('insert into matches'
+               '(game_title, game_url, start_time, players_min, players_max)'
+               'values (?, ?, ?, ?, ?)',
+               data)
+    db.commit()
     return True
 
 
@@ -94,7 +112,8 @@ def index():
 class MatchRoute(MethodView):
 
     def get(self):
-        matches = get_matches()
+        matches = get_last_matches()
+        print(matches)
         return jsonify(matches)
 
     def post(self):
