@@ -1,36 +1,32 @@
-# Boardgame Play List
-#
-# https://www.raspberrypi.org/learning/python-web-server-with-flask/worksheet/
-#
-# set FLASK_APP=play.py
-# set FLASK_DEBUG=1
-# flask run
+# -*- coding: utf-8 -*-
 
 import datetime
+import dateutil.parser
 import os
 
-import dateutil.parser
-from datetime import timezone
-
 from sqlite3 import dbapi2 as sqlite3
-
-from flask import Flask, render_template, jsonify, request, current_app, g
+from flask import Flask, jsonify, g, redirect, render_template, request
 from flask.views import MethodView
 
-################################################################################
-# Setup:
 
+# Create application instance.
 app = Flask(__name__)
 
+# Load default config and override config from an environment variable
 app.config.update(dict(
-    DATABASE=os.path.join(app.root_path, 'database', 'play.sqlite')
+    DATABASE=os.path.join(app.root_path, 'database', 'play.sqlite'),
+    DEBUG=True,
 ))
-app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+app.config.from_envvar('PLAYPLAY_SETTINGS', silent=True)
 
+
+################################################################################
+# Database:
 
 def connect_db():
     """Connects to the specific database."""
-    rv = sqlite3.connect(current_app.config['DATABASE'],
+    # rv = sqlite3.connect(app.config['DATABASE'])
+    rv = sqlite3.connect(app.config['DATABASE'],
                          detect_types=sqlite3.PARSE_DECLTYPES)
     # rv.row_factory = sqlite3.Row
     rv.row_factory = dict_factory
@@ -40,9 +36,16 @@ def connect_db():
 def init_db():
     """Initializes the database."""
     db = get_db()
-    with current_app.open_resource('schema.sql', mode='r') as f:
+    with app.open_resource('schema.sql', mode='r') as f:
         db.cursor().executescript(f.read())
     db.commit()
+
+
+@app.cli.command('initdb')
+def initdb_command():
+    """Creates the database tables."""
+    init_db()
+    print('Initialized the database.')
 
 
 def get_db():
@@ -53,6 +56,16 @@ def get_db():
         g.sqlite_db = connect_db()
     return g.sqlite_db
 
+
+@app.teardown_appcontext
+def close_db(error):
+    """Closes the database again at the end of the request."""
+    if hasattr(g, 'sqlite_db'):
+        g.sqlite_db.close()
+
+
+################################################################################
+# Utilities:
 
 def dict_factory(cursor, row):
     d = {}
@@ -67,15 +80,11 @@ def dict_factory(cursor, row):
 # weirdness is determined.
 def utc_datetime(string):
     date = dateutil.parser.parse(string)
-    utc_date = date.astimezone(timezone.utc)
+    utc_date = date.astimezone(datetime.timezone.utc)
     return utc_date.replace(tzinfo=None)
 
 
-################################################################################
-# Utilities:
-
 def get_last_matches(limit=20):
-    # init_db()
     db = get_db()
     cur = db.execute('SELECT * FROM matches ORDER BY id DESC LIMIT ?', [limit])
     entries = cur.fetchall()
@@ -118,5 +127,6 @@ class MatchRoute(MethodView):
 
     def post(self):
         return jsonify(add_match())
+
 
 app.add_url_rule('/api/v1/matches', view_func=MatchRoute.as_view('match'))

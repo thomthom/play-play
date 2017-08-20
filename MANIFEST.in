@@ -1,0 +1,3 @@
+graft playplay/assets
+graft playplay/static
+include playplay/schema.sql
