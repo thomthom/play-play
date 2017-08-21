@@ -82,8 +82,9 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="form-group">
-          <select class="form-control" id="selPreviousGames">
-            <option v-for="game in games" v-bind:value="game.id">
+          <select class="form-control" id="selPreviousGames"
+              v-on:input="selectGame">
+            <option v-for="(game, index) in games" v-bind:value="index">
               {{ game.game_title }}
               ({{ game.players_min }}-{{ game.players_max }}👤,
                {{ game.game_time }}min 🕑)
@@ -103,25 +104,53 @@
         </div>
 
         <div class="form-group">
-          <input type="text" class="form-control" id="txtMatchGameUrl" placeholder="Game URL">
-        </div>
-
-        <div class="form-group">
-          <input type="text" class="form-control" id="txtMatchGameTime" placeholder="Game Time in Minutes">
+          <div class="input-group">
+            <input type="text" class="form-control" id="txtMatchGameUrl" placeholder="Game URL">
+            <span class="input-group-addon">🔗</span>
+          </div>
         </div>
 
         <div class="row">
           <div class="col-lg-6">
 
             <div class="form-group">
-              <input type="text" class="form-control" id="txtMatchMinPlayers" placeholder="Minimum Players">
+              <div class="input-group">
+                <input type="text" class="form-control" id="txtMatchGameTime" placeholder="Game Time in Minutes">
+                <span class="input-group-addon">🕑</span>
+              </div>
             </div>
 
           </div>
           <div class="col-lg-6">
 
             <div class="form-group">
-              <input type="text" class="form-control" id="txtMatchMaxPlayers" placeholder="Maximum Players">
+              <div class="input-group">
+                <input type="text" class="form-control" id="txtMatchGameTimeMax" placeholder="Max Game Time in Minutes">
+                <span class="input-group-addon">🕣</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6">
+
+            <div class="form-group">
+              <div class="input-group">
+                <input type="text" class="form-control" id="txtMatchMinPlayers" placeholder="Minimum Players">
+                <span class="input-group-addon">👤</span>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-lg-6">
+
+            <div class="form-group">
+              <div class="input-group">
+                <input type="text" class="form-control" id="txtMatchMaxPlayers" placeholder="Maximum Players">
+                <span class="input-group-addon">👥</span>
+              </div>
             </div>
 
           </div>

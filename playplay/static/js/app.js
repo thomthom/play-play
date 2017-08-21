@@ -69,6 +69,15 @@ var app = new Vue({
         this.games = data;
       });
     },
+    selectGame: function(event) {
+      var index = $(event.target).val();
+      var game = this.games[index];
+      $('#txtMatchGameTitle').val(game.game_title);
+      $('#txtMatchGameUrl').val(game.game_url);
+      $('#txtMatchGameTime').val(game.game_time);
+      $('#txtMatchMinPlayers').val(game.players_min);
+      $('#txtMatchMaxPlayers').val(game.players_max);
+    },
     updateData: function() {
       this.getMatches();
       this.getGames();

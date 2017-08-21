@@ -27,6 +27,12 @@ td a {
 }
 
 
+.input-group-addon {
+  background: #000;
+  color: #eee;
+}
+
+
 #footer {
   position: fixed;
   bottom: 0;
