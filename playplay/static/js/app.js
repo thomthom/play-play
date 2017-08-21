@@ -30,7 +30,8 @@ Vue.component('play-modal', {
 var app = new Vue({
   el: '#app',
   data: {
-    matches: []
+    games: [],
+    matches: [],
   },
   methods: {
     getMatches: function() {
@@ -52,7 +53,7 @@ var app = new Vue({
       };
       // TODO(thomthom): Validate
       $.post('/api/v1/matches', match, (data) => {
-        this.getMatches();
+        this.updateData();
         $('#addMatchModal').modal('hide');
       });
     },
@@ -62,6 +63,15 @@ var app = new Vue({
       $('#txtMatchGameTime').val('');
       $('#txtMatchMinPlayers').val('');
       $('#txtMatchMaxPlayers').val('');
+    },
+    getGames: function () {
+      $.get('/api/v1/games', (data) => {
+        this.games = data;
+      });
+    },
+    updateData: function() {
+      this.getMatches();
+      this.getGames();
     },
     // Hack: Quick and dirty!
     // https://laracasts.com/discuss/channels/vue/momentjs-with-vue/replies/283896
@@ -78,10 +88,11 @@ var app = new Vue({
       sideBySide: true,
       format: 'DDDD YYYY HH:mm',
       minDate: Date.now(),
+      locale: 'en-gb'
     });
     $('#addMatchModal').on('show.bs.modal', (e) => {
       this.resetMatchModal();
     })
-    this.getMatches();
+    this.updateData();
   }
 })

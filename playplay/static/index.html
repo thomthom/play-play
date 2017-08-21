@@ -83,9 +83,11 @@
       <div class="col-lg-12">
         <div class="form-group">
           <select class="form-control" id="selPreviousGames">
-            <option>Exploding Kittens (2-5👤, 15min 🕑)</option>
-            <option>Scythe (3-6👤, 115min 🕑)</option>
-            <option>Settlers (2-5👤, 60min 🕑)</option>
+            <option v-for="game in games" v-bind:value="game.id">
+              {{ game.game_title }}
+              ({{ game.players_min }}-{{ game.players_max }}👤,
+               {{ game.game_time }}min 🕑)
+            </option>
           </select>
         </div>
       </div><!-- /.col-lg-12 -->

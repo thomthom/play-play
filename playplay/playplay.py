@@ -95,18 +95,28 @@ def add_match():
     data = [
         request.form['game_title'],
         request.form['game_url'],
-        # db_time(request.form['start_time']),
+        request.form['game_time'],
         utc_datetime(request.form['start_time']),
         request.form['players_min'],
         request.form['players_max']
     ]
     db = get_db()
-    db.execute('insert into matches'
-               '(game_title, game_url, start_time, players_min, players_max)'
-               'values (?, ?, ?, ?, ?)',
+    db.execute('INSERT INTO matches '
+               '(game_title, game_url, game_time, start_time, players_min, players_max) '
+               'VALUES (?, ?, ?, ?, ?, ?)',
                data)
     db.commit()
     return True
+
+
+def get_games():
+    db = get_db()
+    cur = db.execute('SELECT id, game_title, game_url, game_time, players_min, players_max '
+                     'FROM matches '
+                     'GROUP BY game_title '
+                     'ORDER BY id DESC')
+    entries = cur.fetchall()
+    return entries
 
 
 ################################################################################
@@ -121,12 +131,19 @@ def index():
 class MatchRoute(MethodView):
 
     def get(self):
-        matches = get_last_matches()
-        print(matches)
-        return jsonify(matches)
+        return jsonify(get_last_matches())
 
     def post(self):
         return jsonify(add_match())
 
 
 app.add_url_rule('/api/v1/matches', view_func=MatchRoute.as_view('match'))
+
+
+class GameRoute(MethodView):
+
+    def get(self):
+        return jsonify(get_games())
+
+
+app.add_url_rule('/api/v1/games', view_func=GameRoute.as_view('game'))
