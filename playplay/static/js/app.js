@@ -103,6 +103,8 @@ var app = new Vue({
       locale: 'en-gb'
     });
     $('#addMatchModal').on('show.bs.modal', (e) => {
+      // Force the date-time-picker to update.
+      $('#dateTimeMatch').datetimepicker('date', moment());
       this.resetMatchModal();
     })
     this.updateData();
