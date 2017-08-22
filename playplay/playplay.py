@@ -125,11 +125,23 @@ def utc_datetime(string):
 def get_next_matches(limit=20):
     db = get_db()
     cur = db.execute('''
-        SELECT *, DATETIME(start_time) < DATETIME('now') AS in_past
-        FROM matches
-        ORDER BY in_past, start_time ASC
-        LIMIT ?
-        ''', [limit])
+        SELECT * FROM
+            (SELECT *
+                FROM matches
+                WHERE DATETIME(start_time) > DATETIME('now')
+                ORDER BY start_time ASC
+                LIMIT :limit
+            ) upcoming
+        UNION ALL
+        SELECT * FROM
+            (SELECT *
+                FROM matches
+                WHERE DATETIME(start_time) < DATETIME('now')
+                ORDER BY start_time DESC
+                LIMIT :limit
+            ) past
+        LIMIT :limit
+        ''', {'limit': limit})
     entries = cur.fetchall()
     return entries
 
