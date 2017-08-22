@@ -120,9 +120,16 @@ def utc_datetime(string):
     return utc_date.replace(tzinfo=None)
 
 
-def get_last_matches(limit=20):
+# This returns the next set of matches coming up. If they are less than the
+# limit then past matches will be listed below.
+def get_next_matches(limit=20):
     db = get_db()
-    cur = db.execute('SELECT * FROM matches ORDER BY id DESC LIMIT ?', [limit])
+    cur = db.execute('''
+        SELECT *, DATETIME(start_time) < DATETIME('now') AS in_past
+        FROM matches
+        ORDER BY in_past, start_time ASC
+        LIMIT ?
+        ''', [limit])
     entries = cur.fetchall()
     return entries
 
@@ -197,7 +204,7 @@ def index():
 class MatchRoute(MethodView):
 
     def get(self):
-        return jsonify(get_last_matches())
+        return jsonify(get_next_matches())
 
     def post(self):
         add_game(request.form)
