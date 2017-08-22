@@ -41,11 +41,47 @@ def init_db():
     db.commit()
 
 
+def seed_db():
+    """Seeds the database."""
+    db = get_db()
+    add_game({
+        'game_title': 'Caverna',
+        'game_url': 'https://boardgamegeek.com/boardgame/102794/caverna-cave-farmers',
+        'play_time_min': 30,
+        'play_time_max': 210,
+        'players_min': 1,
+        'players_max': 7
+    })
+    add_game({
+        'game_title': 'Exploding Kittens',
+        'game_url': 'https://boardgamegeek.com/boardgame/172225/exploding-kittens',
+        'play_time_min': 15,
+        'play_time_max': None,
+        'players_min': 2,
+        'players_max': 5
+    })
+    add_game({
+        'game_title': 'Scythe',
+        'game_url': 'https://boardgamegeek.com/boardgame/169786/scythe',
+        'play_time_min': 90,
+        'play_time_max': 115,
+        'players_min': 1,
+        'players_max': 5
+    })
+
+
 @app.cli.command('initdb')
 def initdb_command():
     """Creates the database tables."""
     init_db()
     print('Initialized the database.')
+
+
+@app.cli.command('seeddb')
+def seeddb_command():
+    """Creates the database tables."""
+    seed_db()
+    print('Seeded the database.')
 
 
 def get_db():
@@ -91,30 +127,60 @@ def get_last_matches(limit=20):
     return entries
 
 
-def add_match():
-    data = [
-        request.form['game_title'],
-        request.form['game_url'],
-        request.form['game_time'],
-        utc_datetime(request.form['start_time']),
-        request.form['players_min'],
-        request.form['players_max']
+def add_match(data):
+    values = [
+        data['game_title'],
+        data['game_url'],
+        utc_datetime(data['start_time']),
+        data['play_time_min'],
+        data['play_time_max'],
+        data['players_min'],
+        data['players_max']
     ]
     db = get_db()
-    db.execute('INSERT INTO matches '
-               '(game_title, game_url, game_time, start_time, players_min, players_max) '
-               'VALUES (?, ?, ?, ?, ?, ?)',
-               data)
+    db.execute('''
+        INSERT INTO matches (
+            game_title, game_url, start_time,
+            play_time_min, play_time_max,
+            players_min, players_max
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''', values)
+    db.commit()
+    return True
+
+
+def add_game(data):
+    values = [
+        data['game_title'],
+        data['game_url'],
+        data['play_time_min'],
+        data['play_time_max'],
+        data['players_min'],
+        data['players_max']
+    ]
+    db = get_db()
+    db.execute('''
+        INSERT OR IGNORE INTO games (
+            game_title, game_url,
+            play_time_min, play_time_max,
+            players_min, players_max
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+        ''', values)
     db.commit()
     return True
 
 
 def get_games():
     db = get_db()
-    cur = db.execute('SELECT id, game_title, game_url, game_time, players_min, players_max '
-                     'FROM matches '
-                     'GROUP BY game_title '
-                     'ORDER BY id DESC')
+    cur = db.execute('''
+        SELECT id, game_title, game_url,
+            play_time_min, play_time_max,
+            players_min, players_max
+        FROM games
+        ORDER BY game_title ASC
+        ''')
     entries = cur.fetchall()
     return entries
 
@@ -134,7 +200,8 @@ class MatchRoute(MethodView):
         return jsonify(get_last_matches())
 
     def post(self):
-        return jsonify(add_match())
+        add_game(request.form)
+        return jsonify(add_match(request.form))
 
 
 app.add_url_rule('/api/v1/matches', view_func=MatchRoute.as_view('match'))

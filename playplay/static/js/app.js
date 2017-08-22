@@ -46,7 +46,8 @@ var app = new Vue({
       var match = {
         game_title: $('#txtMatchGameTitle').val(),
         game_url: $('#txtMatchGameUrl').val(),
-        game_time: parseInt($('#txtMatchGameTime').val()),
+        play_time_min: parseInt($('#txtMatchGameTime').val()),
+        play_time_max: parseInt($('#txtMatchGameTimeMax').val()),
         start_time: moment(date_time.date()).utc().format(),
         players_min: parseInt($('#txtMatchMinPlayers').val()),
         players_max: parseInt($('#txtMatchMaxPlayers').val()),
@@ -61,6 +62,7 @@ var app = new Vue({
       $('#txtMatchGameTitle').val('');
       $('#txtMatchGameUrl').val('');
       $('#txtMatchGameTime').val('');
+      $('#txtMatchGameTimeMax').val('');
       $('#txtMatchMinPlayers').val('');
       $('#txtMatchMaxPlayers').val('');
     },
@@ -74,7 +76,8 @@ var app = new Vue({
       var game = this.games[index];
       $('#txtMatchGameTitle').val(game.game_title);
       $('#txtMatchGameUrl').val(game.game_url);
-      $('#txtMatchGameTime').val(game.game_time);
+      $('#txtMatchGameTime').val(game.play_time_min);
+      $('#txtMatchGameTimeMax').val(game.play_time_max);
       $('#txtMatchMinPlayers').val(game.players_min);
       $('#txtMatchMaxPlayers').val(game.players_max);
     },

@@ -27,7 +27,7 @@
   <table class="table table-striped table-hover table-condensed" id="board">
 
     <colgroup width="*"></colgroup>
-    <colgroup width="20%"></colgroup>
+    <colgroup width="25%"></colgroup>
     <colgroup width="10%"></colgroup>
     <colgroup width="25%"></colgroup>
 
@@ -87,7 +87,13 @@
             <option v-for="(game, index) in games" v-bind:value="index">
               {{ game.game_title }}
               ({{ game.players_min }}-{{ game.players_max }}👤,
-               {{ game.game_time }}min 🕑)
+              <template v-if="game.play_time_max">
+                 {{ game.play_time_min }}-{{ game.play_time_max }}
+              </template>
+              <template v-else>
+                {{ game.play_time_min }}
+              </template>
+              min 🕑)
             </option>
           </select>
         </div>
