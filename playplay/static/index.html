@@ -41,7 +41,7 @@
     </thead>
     <tbody>
 
-      <tr v-for="match in matches">
+      <tr v-for="(match, index) in matches" v-bind:data-match="index">
         <td class="td-group-1">
           <a v-bind:href="match.game_url" target="_blank">
             {{ match.game_title }}
@@ -52,7 +52,7 @@
           {{ moment(match.start_time).format('ddd HH:mm') }}
         </td>
         <td class="td-group-3">
-          <a href="#">
+          <a href="#" v-on:click.prevent="showMatchPlayerModal">
             {{ split(match.players_registered, ';').length }}
             of
             ({{ match.players_min }}-{{ match.players_max }})
@@ -74,6 +74,7 @@
       Add new match...
     </a>
   </div>
+
 
   <play-modal title="Add Match" id="addMatchModal"
               accept="Add Match" dismiss="Cancel"
@@ -182,6 +183,42 @@
 
   </play-modal>
 
+
+  <play-modal title="Match Players" id="editMatchPlayersModal"
+              accept="Save" dismiss="Cancel" v-on:accept="saveMatchPlayers">
+    <table class="table table-striped">
+      <colgroup width="*"></colgroup>
+      <colgroup width="10%"></colgroup>
+      <thead>
+        <tr><th colspan="2">Player Name</th></tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td>
+            <div class="form-group">
+              <input type="text" class="form-control"
+                     placeholder="Add new player"
+                     v-bind:disabled="canAddPlayer"
+                     v-on:keyup.enter="addPlayer">
+            </div>
+          </td>
+          <td>
+            <button type="button" class="btn btn-primary"
+                    v-bind:disabled="canAddPlayer"
+                    v-on:click="addPlayer">
+              Add
+            </button>
+          </td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr v-for="player in players">
+          <td>{{ player }}</td>
+          <td><a href="#">Remove</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </play-modal>
 
   </div> <!-- #app -->
 

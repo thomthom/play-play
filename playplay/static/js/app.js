@@ -32,8 +32,29 @@ var app = new Vue({
   data: {
     games: [],
     matches: [],
+    // List of players in the Match Player Modal.
+    players: [],
+    // The match being edited.
+    currentMatch: null,
+  },
+  computed: {
+    canAddPlayer: function () {
+      return !(this.currentMatch &&
+               this.players.length < this.currentMatch.players_max);
+    }
   },
   methods: {
+    showMatchPlayerModal: function(event) {
+      var index = $(event.target).closest('tr').data('match');
+      var match = this.matches[index];
+      this.currentMatch = match;
+      // console.log(match);
+      // console.log(match.players_registered);
+      var players = this.split(match.players_registered, ';');
+      // console.log(players);
+      this.players = players;
+      $('#editMatchPlayersModal').modal('show');
+    },
     getMatches: function() {
       $.get('/api/v1/matches', (data) => {
         this.matches = data;
@@ -56,6 +77,43 @@ var app = new Vue({
       $.post('/api/v1/matches', match, (data) => {
         this.updateData();
         $('#addMatchModal').modal('hide');
+      });
+    },
+    addPlayer: function() {
+      var $input = $('#editMatchPlayersModal input');
+      var player = $input.val();
+      player = player.replace(/;/g, '');
+      if (player.length > 0) {
+        this.players.push(player);
+        $input.val('');
+      }
+    },
+    saveMatchPlayers: function() {
+      console.log('saveMatchPlayers');
+      // $.ajax({
+      //   url: '/api/v1/matches',
+      //   data: JSON.stringify(data),
+      //   type: 'PATCH',
+      //   contentType: 'application/json',
+      //   processData: false,
+      //   dataType: 'json'
+      // )};
+      console.log(this.currentMatch);
+      // var match = this.matches[this.currentMatch];
+      var match = this.currentMatch;
+      var data = {
+        'id': match.id,
+        'players_registered': this.players.sort().join(';')
+      }
+      $.ajax({
+        url: '/api/v1/matches',
+        data: data,
+        type: 'PATCH',
+        success: () => {
+          $('#editMatchPlayersModal').modal('hide');
+          this.currentMatch = null;
+          this.updateData();
+        }
       });
     },
     resetMatchModal: function() {

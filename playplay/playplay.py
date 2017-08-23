@@ -169,6 +169,19 @@ def add_match(data):
     return True
 
 
+def edit_match(data):
+    print('Edit Match')
+    print(data)
+    db = get_db()
+    db.execute('''
+        UPDATE matches
+        SET players_registered = :players_registered
+        WHERE id = :id
+        ''', data)
+    db.commit()
+    return True
+
+
 def add_game(data):
     values = [
         data['game_title'],
@@ -221,6 +234,9 @@ class MatchRoute(MethodView):
     def post(self):
         add_game(request.form)
         return jsonify(add_match(request.form))
+
+    def patch(self):
+        return jsonify(edit_match(request.form))
 
 
 app.add_url_rule('/api/v1/matches', view_func=MatchRoute.as_view('match'))
