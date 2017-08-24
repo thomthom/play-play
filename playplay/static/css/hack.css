@@ -2,6 +2,7 @@ body {
   /* font-size: 30px; */
   padding-top: 0px;
   zoom: 250%;
+  overflow: hidden;
 }
 
 
@@ -24,6 +25,10 @@ td a {
 
 .modal .modal-footer {
   border-top-color: #1a1a1b !important;
+}
+
+.modal-open {
+    padding-right: 0px !important;
 }
 
 
