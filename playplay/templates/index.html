@@ -11,7 +11,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Play-Play @ Work-Work</title>
+  <title>{{ title }}</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:400,300,700">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:500">
@@ -33,12 +33,13 @@
 
     <thead>
     <tr>
-      <th class="td-group-1">Play-Play @ Work-Work</th>
+      <th class="td-group-1">{{ title }}</th>
       <th class="td-group-2">When</th>
       <th class="td-group-3">Players</th>
       <th class="td-group-4">Winner</th>
     </tr>
     </thead>
+{% raw %}
     <tbody>
 
       <tr v-for="(match, index) in matches" v-bind:data-match="index">
@@ -260,6 +261,8 @@
   <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
   <script src="/static/js/vue.js"></script>
   <script src="/static/js/app.js"></script>
+
+{% endraw %}
 
 </body>
 </html>

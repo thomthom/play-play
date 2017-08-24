@@ -2,6 +2,7 @@
 
 import datetime
 import dateutil.parser
+import json
 import os
 
 from sqlite3 import dbapi2 as sqlite3
@@ -18,6 +19,16 @@ app.config.update(dict(
     DEBUG=True,
 ))
 app.config.from_envvar('PLAYPLAY_SETTINGS', silent=True)
+
+
+################################################################################
+# Configuraton:
+
+def load_config():
+    config_file = os.path.join(app.root_path, 'config.json')
+    with open(config_file) as config_json:
+        config = json.load(config_json)
+    return config
 
 
 ################################################################################
@@ -242,8 +253,8 @@ def get_games():
 
 @app.route('/')
 def index():
-    # TODO(thomthom): Use jinja template and inject app title.
-    return app.send_static_file('index.html')
+    config = load_config()
+    return render_template('index.html', **config)
 
 
 class MatchRoute(MethodView):
