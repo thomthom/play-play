@@ -88,18 +88,10 @@ var app = new Vue({
         $input.val('');
       }
     },
+    removePlayer: function(index) {
+      this.players.splice(index, 1);
+    },
     saveMatchPlayers: function() {
-      console.log('saveMatchPlayers');
-      // $.ajax({
-      //   url: '/api/v1/matches',
-      //   data: JSON.stringify(data),
-      //   type: 'PATCH',
-      //   contentType: 'application/json',
-      //   processData: false,
-      //   dataType: 'json'
-      // )};
-      console.log(this.currentMatch);
-      // var match = this.matches[this.currentMatch];
       var match = this.currentMatch;
       var data = {
         'id': match.id,

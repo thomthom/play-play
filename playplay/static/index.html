@@ -212,9 +212,13 @@
         </tr>
       </tfoot>
       <tbody>
-        <tr v-for="player in players">
+        <tr v-for="(player, index) in players">
           <td>{{ player }}</td>
-          <td><a href="#">Remove</a></td>
+          <td>
+            <a href="#" v-on:click.prevent="removePlayer(index)">
+              Remove
+            </a>
+          </td>
         </tr>
       </tbody>
     </table>
