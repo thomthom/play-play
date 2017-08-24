@@ -1,8 +1,20 @@
 Vue.component('play-modal', {
-  props: ['title', 'accept', 'dismiss'],
+  props: ['title', 'accept', 'dismiss', 'size'],
+  computed: {
+    modalClass() {
+      switch(this.size) {
+        case 'small':
+          return 'modal-sm';
+        case 'large':
+          return 'modal-lg';
+        default:
+          return '';
+      }
+    }
+  },
   template: `
 <div class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog" v-bind:class="modalClass" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

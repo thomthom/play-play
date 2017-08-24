@@ -78,6 +78,7 @@
 
 
   <play-modal title="Add Match" id="addMatchModal"
+              size="large"
               accept="Add Match" dismiss="Cancel"
               v-on:accept="addMatch">
   
@@ -186,13 +187,11 @@
 
 
   <play-modal title="Match Players" id="editMatchPlayersModal"
+              size="small"
               accept="Save" dismiss="Cancel" v-on:accept="saveMatchPlayers">
     <table class="table table-striped">
       <colgroup width="*"></colgroup>
       <colgroup width="10%"></colgroup>
-      <thead>
-        <tr><th colspan="2">Player Name</th></tr>
-      </thead>
       <tfoot>
         <tr>
           <td>
@@ -227,15 +226,11 @@
 
 
   <play-modal title="Match Winner" id="editMatchWinnerModal"
+              size="small"
               accept="Save" dismiss="Cancel" v-on:accept="saveMatchWinner">
     <table class="table table-striped">
       <colgroup width="*"></colgroup>
       <colgroup width="10%"></colgroup>
-      <thead>
-        <tr>
-          <th colspan="2">Player Name</th>
-        </tr>
-      </thead>
       <tbody>
         <tr v-for="(player, index) in players">
           <td>
