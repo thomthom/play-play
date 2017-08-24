@@ -36,23 +36,18 @@ var app = new Vue({
     players: [],
     // The match being edited.
     currentMatch: null,
+    // Picked winner
+    pickedWinner: null
   },
   computed: {
     canAddPlayer: function () {
       return !(this.currentMatch &&
                this.players.length < this.currentMatch.players_max);
-    }
+    },
   },
   methods: {
     showMatchPlayerModal: function(event) {
-      var index = $(event.target).closest('tr').data('match');
-      var match = this.matches[index];
-      this.currentMatch = match;
-      // console.log(match);
-      // console.log(match.players_registered);
-      var players = this.split(match.players_registered, ';');
-      // console.log(players);
-      this.players = players;
+      this.getCurrentMatch(event);
       $('#editMatchPlayersModal').modal('show');
     },
     getMatches: function() {
@@ -83,6 +78,7 @@ var app = new Vue({
       var $input = $('#editMatchPlayersModal input');
       var player = $input.val();
       player = player.replace(/;/g, '');
+      // TODO: Validate - no duplicate names.
       if (player.length > 0) {
         this.players.push(player);
         $input.val('');
@@ -107,6 +103,42 @@ var app = new Vue({
           this.updateData();
         }
       });
+    },
+    showMatchWinnerDialog: function (event) {
+      this.getCurrentMatch(event);
+      $('#editMatchWinnerModal').modal('show');
+    },
+    pickWinner: function(winner) {
+      this.pickedWinner = winner;
+    },
+    saveMatchWinner: function() {
+      var match = this.currentMatch;
+      var data = {
+        'id': match.id,
+        'winner': this.pickedWinner
+      }
+      $.ajax({
+        url: '/api/v1/matches',
+        data: data,
+        type: 'PATCH',
+        success: () => {
+          $('#editMatchWinnerModal').modal('hide');
+          this.currentMatch = null;
+          this.updateData();
+        }
+      });
+    },
+    canPickWinner(match) {
+      return match.players_registered.length > 0 &&
+        moment().isAfter(moment(match.start_time))
+    },
+    getCurrentMatch(event) {
+      var index = $(event.target).closest('tr').data('match');
+      var match = this.matches[index];
+      this.currentMatch = match;
+      var players = this.split(match.players_registered, ';');
+      this.players = players;
+      this.pickedWinner = match.winner
     },
     resetMatchModal: function() {
       $('#txtMatchGameTitle').val('');

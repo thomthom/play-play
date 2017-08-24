@@ -172,10 +172,30 @@ def add_match(data):
 def edit_match(data):
     print('Edit Match')
     print(data)
+    # Kludge! Find a good way to dynamically (and safely) build a query from
+    # key-value pairs.
+    if 'players_registered' in data:
+        return edit_match_players(data)
+    elif 'winner' in data:
+        return edit_match_winner(data)
+
+
+def edit_match_players(data):
     db = get_db()
     db.execute('''
         UPDATE matches
         SET players_registered = :players_registered
+        WHERE id = :id
+        ''', data)
+    db.commit()
+    return True
+
+
+def edit_match_winner(data):
+    db = get_db()
+    db.execute('''
+        UPDATE matches
+        SET winner = :winner
         WHERE id = :id
         ''', data)
     db.commit()

@@ -59,7 +59,8 @@
           </a>
         </td>
         <td class="td-group-4">
-          <a href="#" v-if="moment().isAfter(moment(match.start_time))">
+          <a href="#" v-if="canPickWinner(match)"
+                      v-on:click.prevent="showMatchWinnerDialog">
             {{ match.winner || 'Who won?' }}
           </a>
           <span v-else>---</span>
@@ -217,6 +218,35 @@
           <td>
             <a href="#" v-on:click.prevent="removePlayer(index)">
               Remove
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </play-modal>
+
+
+  <play-modal title="Match Winner" id="editMatchWinnerModal"
+              accept="Save" dismiss="Cancel" v-on:accept="saveMatchWinner">
+    <table class="table table-striped">
+      <colgroup width="*"></colgroup>
+      <colgroup width="10%"></colgroup>
+      <thead>
+        <tr>
+          <th colspan="2">Player Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(player, index) in players">
+          <td>
+            {{ player }}
+            <template v-if="pickedWinner && pickedWinner == player">
+              ⭐
+            </template>
+          </td>
+          <td>
+            <a href="#" v-on:click.prevent="pickWinner(player)">
+              Winner
             </a>
           </td>
         </tr>
