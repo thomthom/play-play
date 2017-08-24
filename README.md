@@ -18,19 +18,23 @@ A board for listing past present and future games being played.
 
    *nix
 
-       export FLASK_APP=playplay
+        export FLASK_APP=playplay
 
    Windows:
 
-       set FLASK_APP=playplay
+        set FLASK_APP=playplay
 
 4. Initialize the database with this command:
 
-       flask initdb
+        flask initdb
 
 5. Now you can run Play-Play:
 
-       flask run
+        flask run
 
-    the application will greet you on
-    http://localhost:5000/
+   the application will greet you on
+   http://localhost:5000/
+
+   To allow access from the network:
+
+        flask run --host=0.0.0.0
