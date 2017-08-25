@@ -42,13 +42,15 @@ Vue.component('play-modal', {
 var app = new Vue({
   el: '#app',
   data: {
+    // List of known games.
     games: [],
+    // List of most recent and upcoming matches.
     matches: [],
     // List of players in the Match Player Modal.
     players: [],
     // The match being edited.
     currentMatch: null,
-    // Picked winner
+    // Picked winner.
     pickedWinner: null
   },
   computed: {
@@ -69,8 +71,6 @@ var app = new Vue({
     },
     addMatch: function() {
       var date_time = $('#dateTimeMatch').data("DateTimePicker");
-      // console.log(moment(date_time.date()).format());
-      // console.log(moment(date_time.date()).utc().format());
       var match = {
         game_title: $('#txtMatchGameTitle').val(),
         game_url: $('#txtMatchGameUrl').val(),
