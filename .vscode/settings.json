@@ -1,4 +1,9 @@
 {
   "editor.formatOnPaste": true,
-  "cSpell.enabled": false
+  "cSpell.enabled": false,
+  "files.exclude": {
+    "**/*.eggs": true,
+    "**/*.egg-info": true,
+    "**/__pycache__": true
+  }
 }
