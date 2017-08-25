@@ -51,7 +51,9 @@ var app = new Vue({
     // The match being edited.
     currentMatch: null,
     // Picked winner.
-    pickedWinner: null
+    pickedWinner: null,
+    // Last URL data (used to debounce BGG fetch)
+    urlData: null
   },
   computed: {
     canAddPlayer: function () {
@@ -85,6 +87,41 @@ var app = new Vue({
         this.updateData();
         $('#addMatchModal').modal('hide');
       });
+    },
+    lookupUrl(event) {
+      var url = $(event.target).val();
+      var result = url.match(/https?:\/\/boardgamegeek.com\/([^/]+)\/([^/]+)(?:\/.*)/);
+      if (result) {
+        var type = result[1];
+        var id = result[2];
+        console.log(type, id);
+        this.fetchBGGdata(type, id);
+      }
+    },
+    fetchBGGdata(type, id) {
+      var params = {
+        type: type,
+        id: id
+      };
+      // Debounce requests to BGG. Don't request unless the URL data is
+      // different from what was already fetched.
+      if (this.urlData && this.urlData.type == params.type &&
+                          this.urlData.id == params.id) {
+        console.log('Identical data');
+        return false;
+      }
+      console.log('Fetching new...')
+      $.get('https://boardgamegeek.com/xmlapi2/thing', params, (xml) => {
+        console.log(xml);
+        var $doc = $(xml);
+        $('#txtMatchGameTitle').val($doc.find('name[type=primary]').attr('value'));
+        $('#txtMatchGameTime').val($doc.find('minplaytime').attr('value'));
+        $('#txtMatchGameTimeMax').val($doc.find('maxplaytime').attr('value'));
+        $('#txtMatchMinPlayers').val($doc.find('minplayers').attr('value'));
+        $('#txtMatchMaxPlayers').val($doc.find('maxplayers').attr('value'));
+        this.urlData = params;
+      });
+      return true;
     },
     addPlayer: function() {
       var $input = $('#editMatchPlayersModal input');
@@ -197,6 +234,7 @@ var app = new Vue({
       locale: 'en-gb'
     });
     $('#addMatchModal').on('show.bs.modal', (e) => {
+      this.urlData = null;
       // Force the date-time-picker to update.
       $('#dateTimeMatch').datetimepicker('date', moment());
       this.resetMatchModal();

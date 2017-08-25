@@ -116,10 +116,16 @@
         </div>
 
         <div class="form-group">
+          <p>
+            <small>
+              Paste BoardGameGeek URL to auto-fill form
+            </small>
+          </p>
           <div class="input-group">
             <input type="text" class="form-control" id="txtMatchGameUrl"
               title="Game URL"
-              placeholder="Game URL">
+              placeholder="Game URL"
+              v-on:input="lookupUrl">
             <span class="input-group-addon">🔗</span>
           </div>
         </div>
