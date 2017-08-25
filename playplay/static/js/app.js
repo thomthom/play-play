@@ -107,12 +107,12 @@ var app = new Vue({
       // different from what was already fetched.
       if (this.urlData && this.urlData.type == params.type &&
                           this.urlData.id == params.id) {
-        console.log('Identical data');
+        console.log('BGG: Identical data');
         return false;
       }
-      console.log('Fetching new...')
+      console.log('BGG: Fetching new data...')
       $.get('https://boardgamegeek.com/xmlapi2/thing', params, (xml) => {
-        console.log(xml);
+        // console.log(xml);
         var $doc = $(xml);
         $('#txtMatchGameTitle').val($doc.find('name[type=primary]').attr('value'));
         $('#txtMatchGameTime').val($doc.find('minplaytime').attr('value'));
