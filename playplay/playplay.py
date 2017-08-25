@@ -36,10 +36,10 @@ def load_config():
 
 def connect_db():
     """Connects to the specific database."""
-    # rv = sqlite3.connect(app.config['DATABASE'])
     rv = sqlite3.connect(app.config['DATABASE'],
                          detect_types=sqlite3.PARSE_DECLTYPES)
-    # rv.row_factory = sqlite3.Row
+    # Using a custom row factory so results can be more easily converted to
+    # JSON responses.
     rv.row_factory = dict_factory
     return rv
 
@@ -186,8 +186,6 @@ def add_match(data):
 
 
 def edit_match(data):
-    print('Edit Match')
-    print(data)
     # Kludge! Find a good way to dynamically (and safely) build a query from
     # key-value pairs.
     if 'players_registered' in data:
@@ -254,13 +252,16 @@ def get_games():
 
 
 ################################################################################
-# Routes:
+# App Routes:
 
 @app.route('/')
 def index():
     config = load_config()
     return render_template('index.html', **config)
 
+
+################################################################################
+# API Routes:
 
 class MatchRoute(MethodView):
 
