@@ -46,6 +46,11 @@ def connect_db():
 
 def init_db():
     """Initializes the database."""
+    # Ensure the database directory exists.
+    path = os.path.dirname(app.config['DATABASE'])
+    os.makedirs(path, exist_ok=True)
+    # Initialize, this will create the database file as needed as long as the
+    # directory exist.
     db = get_db()
     with app.open_resource('schema.sql', mode='r') as f:
         db.cursor().executescript(f.read())
