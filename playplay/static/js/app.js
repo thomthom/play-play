@@ -251,7 +251,9 @@ var app = new Vue({
     });
     // Configure the Add Match modal dialog.
     $('#addMatchModal').on('show.bs.modal', (e) => {
+      // Reset form data.
       this.urlData = null;
+      this.selectedGame = 'none';
       // Force the date-time-picker to update.
       $('#dateTimeMatch').datetimepicker('date', moment());
       this.resetMatchModal();
