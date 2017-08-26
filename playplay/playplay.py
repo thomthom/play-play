@@ -22,12 +22,19 @@ app.config.from_envvar('PLAYPLAY_SETTINGS', silent=True)
 
 
 ################################################################################
-# Configuraton:
+# Configuration:
 
 def load_config():
     config_file = os.path.join(app.root_path, 'config.json')
-    with open(config_file) as config_json:
-        config = json.load(config_json)
+    defaults = {
+        'title': 'Play-Play'
+    }
+    try:
+        with open(config_file) as config_json:
+            user_config = json.load(config_json)
+    except FileNotFoundError:
+        user_config = {}
+    config = { **defaults, **user_config }
     return config
 
 
@@ -61,7 +68,7 @@ def seed_db():
     """Seeds the database."""
     db = get_db()
     add_game({
-        'game_title': 'Caverna',
+        'game_title': 'Caverna: The Cave Farmers',
         'game_url': 'https://boardgamegeek.com/boardgame/102794/caverna-cave-farmers',
         'play_time_min': 30,
         'play_time_max': 210,
