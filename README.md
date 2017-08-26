@@ -2,39 +2,75 @@
 
 ## What is Play-Play?
 
-A board for listing past present and future games being played.
+A web application for creating display boards organizing game matches. Let your
+friends and colleagues know when and what is being played.
 
-## How do I use it?
+![alt text](images/playplay-dashboard.png)
 
-1. Edit the configuration in the playplay.py file or
-    export an PLAYPLAY_SETTINGS environment variable
-    pointing to a configuration file.
+![alt text](images/playplay-add-match.png)
 
-2. Install the app from the root of the project directory
+## Requirements
 
-       pip install --editable .
+These are what was used to create the project. It does not necessary represent
+minimum requirements.
 
-3. Instruct flask to use the right application
+* Rasberry Pi 3
+* Raspian Stretch
+* Python 3
 
-   *nix
+### Fonts
 
-        export FLASK_APP=playplay
+If you try to view the app from the Pi, or any other Linux distribution you
+might experience that some glyphs doesn't display correctly. You might see
+squares instead. For a workaround to this refer to FONTS.md.
 
-   Windows:
+## Configuration
 
-        set FLASK_APP=playplay
+The application can be configured by creating a `playplay/config.js` file.
+You can use `playplay/config.default.json` as a reference template.
 
-4. Initialize the database with this command:
+Right now it's just the application title.
 
-        flask initdb
+    {
+      "title": "Play-Play"
+    }
 
-5. Now you can run Play-Play:
+## Development Server
 
-        flask run
+Play-Play is a Flask application. You can use Flask's development server for
+development testing.
 
-   the application will greet you on
-   http://localhost:5000/
+**For release deployment see DEPLOYMENT.md.**
 
-   To allow access from the network:
+### Setting Up
 
-        flask run --host=0.0.0.0
+#### Clone the project
+
+    mkdir ~/code
+    cd ~/code
+    git clone https://github.com/thomthom/play-play.git
+
+#### Create a Python Virtual Environment
+
+    sudo pip3 install virtualenv
+    virtualenv playplayenv
+    source playplayenv/bin/activate
+
+#### Install Flask App
+
+    pip install --editable .
+
+#### Configure Flask App
+
+    export FLASK_APP=playplay
+    flask initdb
+
+#### Run Development Server
+
+    flask run
+
+The application can be accessed from: http://localhost:5000/
+
+To allow access from the network:
+
+    flask run --host=0.0.0.0
