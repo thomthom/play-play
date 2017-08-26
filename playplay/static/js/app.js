@@ -48,6 +48,8 @@ var app = new Vue({
     matches: [],
     // List of players in the Match Player Modal.
     players: [],
+    // The selected game.
+    selectedGame: 'none',
     // The match being edited.
     currentMatch: null,
     // Picked winner.

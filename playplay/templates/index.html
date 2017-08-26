@@ -92,8 +92,9 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="form-group">
-          <select class="form-control" id="selPreviousGames"
+          <select class="form-control" v-bind:value="selectedGame"
               v-on:input="selectGame">
+            <option value="none" disabled>Previously played games</option>
             <option v-for="(game, index) in games" v-bind:value="index">
               {{ game.game_title }}
               ({{ game.players_min }}-{{ game.players_max }}👤,
