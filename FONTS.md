@@ -1,13 +1,26 @@
 # Unicode Emojis on Raspberry Pi
 
-By default, if you try to view the Play-Play app in Chome on a Raspberry Pi it
+## Overview
+
+By default, if you try to view the Play-Play app in Chrome on a Raspberry Pi it
 will fail to display most of the Unicode emojis. (Current Raspian version at
 the time of writing is Stretch.)
 
 Turns out to be a known issue in Debian:
 https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=849042
 
-Fortunatly the thread offer a workaround:
+It should be fixed in `fontconfig` 2.11.91.
+
+`fontconfig` in Jessie and Stretch is locked to 2.11.0.
+(https://packages.debian.org/stretch/fontconfig)
+
+Buster, which is the next Debian version, and `fontconfig` for that is currently
+locked to 2.12.3.
+(https://packages.debian.org/buster/fontconfig)
+
+## Workaround
+
+Fortunately the thread offer a workaround:
 https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=849042#5
 
 > Emoji are an extremely common form of expression in modern
