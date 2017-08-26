@@ -201,6 +201,16 @@ def edit_match(data):
         return edit_match_winner(data)
 
 
+def delete_match(match_id):
+    db = get_db()
+    db.execute('''
+        DELETE FROM matches
+        WHERE id = :id
+        ''', { 'id': match_id })
+    db.commit()
+    return True
+
+
 def edit_match_players(data):
     db = get_db()
     db.execute('''
@@ -281,6 +291,9 @@ class MatchRoute(MethodView):
 
     def patch(self):
         return jsonify(edit_match(request.form))
+
+    def delete(self):
+        return jsonify(delete_match(request.form['id']))
 
 
 app.add_url_rule('/api/v1/matches', view_func=MatchRoute.as_view('match'))

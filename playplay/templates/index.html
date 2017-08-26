@@ -36,13 +36,14 @@
     <colgroup width="25%"></colgroup>
     <colgroup width="10%"></colgroup>
     <colgroup width="25%"></colgroup>
+    <colgroup width="1%"></colgroup>
 
     <thead>
     <tr>
       <th class="td-group-1">{{ title }}</th>
       <th class="td-group-2">When</th>
       <th class="td-group-3">Players</th>
-      <th class="td-group-4">Winner</th>
+      <th class="td-group-4" colspan="2">Winner</th>
     </tr>
     </thead>
 {% raw %}
@@ -71,6 +72,11 @@
             {{ match.winner || 'Who won?' }}
           </a>
           <span v-else>---</span>
+        </td>
+        <td>
+          <a href="#" title="Delete Match" v-on:click.prevent="deleteMatch">
+            <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+          </a>
         </td>
       </tr>
 

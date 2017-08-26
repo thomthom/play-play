@@ -89,6 +89,23 @@ var app = new Vue({
         $('#addMatchModal').modal('hide');
       });
     },
+    deleteMatch() {
+      this.getCurrentMatch(event);
+      var match = this.currentMatch;
+      var result = confirm('Do you want to delete this match of ' +
+                          match.game_title + '?\n\nThis cannot be undone.');
+      if (result) {
+        $.ajax({
+          url: '/api/v1/matches',
+          data: { 'id': match.id },
+          type: 'DELETE',
+          success: () => {
+            this.currentMatch = null;
+            this.updateData();
+          }
+        });
+      }
+    },
     lookupUrl(event) {
       var url = $(event.target).val();
       var result = url.match(/https?:\/\/boardgamegeek.com\/([^/]+)\/([^/]+)(?:\/.*)/);
