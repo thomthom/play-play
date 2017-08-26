@@ -1,6 +1,6 @@
 {
   "editor.formatOnPaste": true,
-  "cSpell.enabled": false,
+  "cSpell.enabled": true,
   "files.exclude": {
     "**/*.eggs": true,
     "**/*.egg-info": true,
