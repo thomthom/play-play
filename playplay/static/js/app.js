@@ -82,7 +82,6 @@ var app = new Vue({
         players_min: parseInt($('#txtMatchMinPlayers').val()),
         players_max: parseInt($('#txtMatchMaxPlayers').val()),
       };
-      // TODO(thomthom): Validate
       $.post('/api/v1/matches', match, (data) => {
         this.updateData();
         $('#addMatchModal').modal('hide');
