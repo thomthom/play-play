@@ -1,20 +1,48 @@
+/* Quick hack to make everything larger for larger screens.
+ * This is to make it easier to view from a longer distance.
+ */
+@media(min-width:768px) {
+  body {
+    zoom: 250%;
+  }
+
+  /* The modals needs to be smaller to fit the content. The modals
+   * does't need to have as large content as typically these will be operated
+   * from a computer or tablet - where the user is closer to the screen.
+   */
+  .modal {
+    zoom: 65%;
+  }
+}
+
+
 body {
-  /* font-size: 30px; */
+  /* Ensure the table header is stuck to the stop of the frame. */
   padding-top: 0px;
-  zoom: 250%;
+  /* No scrolling - we only care about the most upcoming matches. */
   overflow: hidden;
 }
 
 
 td a {
+  /* Makes the match links easier to click. */
   display: block;
 }
 
 
-.modal {
-  zoom: 65%;
+/* Fix a footer at the bottom of the viewport. */
+#footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #222223;
+  padding: 5px;
+  border-top: 2px solid #1a1a1b;
 }
 
+
+/* Theme the modals to match the dark theme. */
 .modal .modal-content {
   background: #2a2a2b !important;
 }
@@ -28,23 +56,14 @@ td a {
 }
 
 .modal-open {
-    padding-right: 0px !important;
+  /* Work around a Bootstrap quirk where it adds padding when opening a modal.
+   */
+  padding-right: 0px !important;
 }
 
 
+/* Theme the input groups to match the dark theme. */
 .input-group-addon {
   background: #000;
   color: #eee;
-}
-
-
-#footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  /* background: #2a2a2b; */
-  background: #222223;
-  padding: 5px;
-  border-top: 2px solid #1a1a1b;
 }
