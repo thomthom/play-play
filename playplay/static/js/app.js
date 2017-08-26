@@ -127,11 +127,16 @@ var app = new Vue({
       var $input = $('#editMatchPlayersModal input');
       var player = $input.val();
       player = player.replace(/;/g, '');
-      // TODO: Validate - no duplicate names.
+      if (this.haveName(this.players, player)) {
+        alert('Player names must be unique.');
+        return false;
+      }
       if (player.length > 0) {
         this.players.push(player);
         $input.val('');
+        return true;
       }
+      return false;
     },
     removePlayer: function(index) {
       this.players.splice(index, 1);
@@ -223,6 +228,11 @@ var app = new Vue({
     },
     split(string, delimiter) {
       return string.split(delimiter).filter(x => x);
+    },
+    haveName(array, name) {
+      var index = array.findIndex(
+        item => name.toLowerCase() === item.toLowerCase());
+      return index >= 0;
     }
   },
   mounted: function() {
