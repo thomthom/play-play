@@ -22,7 +22,7 @@ minimum requirements.
 
 If you try to view the app from the Pi, or any other Linux distribution you
 might experience that some glyphs doesn't display correctly. You might see
-squares instead. For a workaround to this refer to FONTS.md.
+squares instead. For a workaround to this refer to [FONTS.md](FONTS.md).
 
 ## Configuration
 
@@ -40,7 +40,7 @@ Right now it's just the application title.
 Play-Play is a Flask application. You can use Flask's development server for
 development testing.
 
-**For release deployment see DEPLOYMENT.md.**
+**For release deployment see [DEPLOYMENT.md](DEPLOYMENT.md).**
 
 ### Setting Up
 
