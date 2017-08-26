@@ -232,9 +232,14 @@ var app = new Vue({
       var index = array.findIndex(
         item => name.toLowerCase() === item.toLowerCase());
       return index >= 0;
+    },
+    // https://stackoverflow.com/a/11582513/486990
+    getURLParameter(name) {
+      return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
     }
   },
   mounted: function() {
+    // Configure the Date-Time Picker.
     $('#dateTimeMatch').datetimepicker({
       inline: true,
       sideBySide: true,
@@ -242,12 +247,20 @@ var app = new Vue({
       minDate: Date.now(),
       locale: 'en-gb'
     });
+    // Configure the Add Match modal dialog.
     $('#addMatchModal').on('show.bs.modal', (e) => {
       this.urlData = null;
       // Force the date-time-picker to update.
       $('#dateTimeMatch').datetimepicker('date', moment());
       this.resetMatchModal();
-    })
+    });
+    // Fetch match and game data.
     this.updateData();
+    // Set up periodic polling.
+    var seconds = this.getURLParameter('interval') || 60;
+    setInterval(() => {
+      console.log('Updating data...');
+      this.updateData();
+    }, seconds * 1000);
   }
 })
