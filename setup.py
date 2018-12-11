@@ -5,7 +5,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'flask==0.12.2',
+        'flask==0.12.4',
         'python-dateutil==2.6.1',
     ],
     setup_requires=[
